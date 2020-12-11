@@ -16,11 +16,6 @@
 
 package org.springframework.context.support;
 
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Supplier;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
@@ -38,6 +33,11 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Supplier;
 
 /**
  * Generic ApplicationContext implementation that holds a single internal
@@ -99,7 +99,7 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	private ResourceLoader resourceLoader;
 
 	private boolean customClassLoader = false;
-
+	//刷新容器的标识， 只能刷新一次？
 	private final AtomicBoolean refreshed = new AtomicBoolean();
 
 
@@ -109,6 +109,7 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	 * @see #refresh
 	 */
 	public GenericApplicationContext() {
+		//创建DefaultListableBeanFactory
 		this.beanFactory = new DefaultListableBeanFactory();
 	}
 
@@ -264,6 +265,7 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	protected final void refreshBeanFactory() throws IllegalStateException {
 		if (!this.refreshed.compareAndSet(false, true)) {
 			throw new IllegalStateException(
+					// 不支持多次刷新尝试：只需调用一次'刷新'
 					"GenericApplicationContext does not support multiple refresh attempts: just call 'refresh' once");
 		}
 		this.beanFactory.setSerializationId(getId());

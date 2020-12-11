@@ -16,8 +16,6 @@
 
 package org.springframework.context.annotation;
 
-import java.util.function.Supplier;
-
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer;
 import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -25,6 +23,8 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.util.function.Supplier;
 
 /**
  * Standalone application context, accepting <em>component classes</em> as input &mdash;
@@ -61,7 +61,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 */
 	private final AnnotatedBeanDefinitionReader reader;
 	/**
-	 * 这是一个扫描器  类路径BD扫描器发
+	 * 这是一个扫描器  类路径BD扫描器   什么玩意？
 	 */
 	private final ClassPathBeanDefinitionScanner scanner;
 

@@ -23,6 +23,8 @@ package org.springframework.context.annotation;
  * @author Juergen Hoeller
  * @since 4.1
  */
+// 注册器
+// 这个接口用于处理  （通过注解来向spring注册Bean的方式）
 public interface AnnotationConfigRegistry {
 
 	/**
@@ -32,12 +34,14 @@ public interface AnnotationConfigRegistry {
 	 * @param componentClasses one or more component classes,
 	 * e.g. {@link Configuration @Configuration} classes
 	 */
+	//注册一个或者多个被加了@Component注解的类
 	void register(Class<?>... componentClasses);
 
 	/**
 	 * Perform a scan within the specified base packages.
 	 * @param basePackages the packages to scan for component classes
 	 */
+	//包扫描路径
 	void scan(String... basePackages);
 
 }

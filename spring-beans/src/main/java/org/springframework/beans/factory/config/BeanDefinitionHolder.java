@@ -37,12 +37,16 @@ import org.springframework.util.StringUtils;
  * @see org.springframework.beans.factory.support.RootBeanDefinition
  * @see org.springframework.beans.factory.support.ChildBeanDefinition
  */
+
+/**
+ * BeanDefinition 的holder持有者   主要作用用于传递参数  没有实际的作用  。  TODO 多参数传递时以后可以学习这种方法
+ */
 public class BeanDefinitionHolder implements BeanMetadataElement {
 
 	private final BeanDefinition beanDefinition;
-
+	// 默认生产的beanName
 	private final String beanName;
-
+	// bean的别名 可以自定义
 	@Nullable
 	private final String[] aliases;
 

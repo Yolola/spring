@@ -55,6 +55,11 @@ import org.springframework.lang.Nullable;
  * @see ConfigurableBeanFactory#addBeanPostProcessor
  * @see BeanFactoryPostProcessor
  */
+
+/**
+ * spring 提供给Bean的后置处理器 （不止一个）
+ * 是spring提供的一个扩展点，给coder使用，让coder可以根据不同的需求去插手Bean的实例化过程
+ */
 public interface BeanPostProcessor {
 
 	/**

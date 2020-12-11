@@ -16,22 +16,16 @@
 
 package org.springframework.context.support;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.EmbeddedValueResolver;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationEventPublisherAware;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.EmbeddedValueResolverAware;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.context.MessageSourceAware;
-import org.springframework.context.ResourceLoaderAware;
+import org.springframework.context.*;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringValueResolver;
+
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 /**
  * {@link BeanPostProcessor} implementation that supplies the {@code ApplicationContext},
@@ -58,6 +52,10 @@ import org.springframework.util.StringValueResolver;
  * @see org.springframework.context.MessageSourceAware
  * @see org.springframework.context.ApplicationContextAware
  * @see org.springframework.context.support.AbstractApplicationContext#refresh()
+ */
+
+/**
+ * 后置处理器context 后置处理器实现有很多
  */
 class ApplicationContextAwareProcessor implements BeanPostProcessor {
 
@@ -102,7 +100,9 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 
 		return bean;
 	}
-
+	//spring 通过后置处理器 给我们的Bean set了一个ApplicationContextAware，我们如果在Bean中想得到这些对象
+	//我们直接实现想要的类的接口中的set方法就行了 定义一个字段 然后再set方法中实现 this.applicationContextAware=applicationContextAware;
+	//当然这里使用@Autowired注解直接注入也没什么问题  循环依赖无需担心
 	private void invokeAwareInterfaces(Object bean) {
 		if (bean instanceof EnvironmentAware) {
 			((EnvironmentAware) bean).setEnvironment(this.applicationContext.getEnvironment());
