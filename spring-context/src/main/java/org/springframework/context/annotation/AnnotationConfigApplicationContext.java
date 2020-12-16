@@ -56,7 +56,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * 这是一个Reader  故名思义 ：读取器
 	 * 	  两个功能：
 	 * 	 1.扫描被注解标记的类
-	 * 	 2.注册BeanDefinition 也就是解析类的定义（在spring环境中的定义）  环境不同定义不同，比如java环境中类的定义是在Class中，类的name，类的方法。
+	 * 	 2.（BeanDefinitionRegistry）注册BeanDefinition 也就是解析类的定义（在spring环境中的定义）  环境不同定义不同，比如java环境中类的定义是在Class中，类的name，类的方法。
 	 *	 在本类的构造器中去实例化  该类没有继承和实现
 	 */
 	private final AnnotatedBeanDefinitionReader reader;
@@ -74,6 +74,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 		// 本类继承于GenericApplicationContext 会默认先去初始化父类构造器这里 是java的特性
 		//super();   这里怕忘记去看父类构造做的事  着重声明一下 TODO
 		this.reader = new AnnotatedBeanDefinitionReader(this);
+		//扫描基于xml的一些配置 Bean
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 

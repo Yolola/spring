@@ -506,7 +506,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// Invoke factory processors registered as beans in the context.
 				// 调用在上下文中注册为bean的工厂处理器。 调用BeanFactory的后置处理器
-				// TODO 重点地方
+				// TODO 重点地方  这里进行包扫描
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.

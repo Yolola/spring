@@ -25,6 +25,7 @@ package org.springframework.context.annotation;
  */
 // 注册器
 // 这个接口用于处理  （通过注解来向spring注册Bean的方式）
+	//配置注解注入@Configuration
 public interface AnnotationConfigRegistry {
 
 	/**

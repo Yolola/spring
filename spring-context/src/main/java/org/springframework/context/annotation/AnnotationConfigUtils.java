@@ -57,6 +57,10 @@ import java.util.Set;
  * @see org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor
  * @see org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor
  */
+
+/**
+ * 配置类
+ */
 public abstract class AnnotationConfigUtils {
 	// 常量是内部类的全路径名
 	/**
@@ -202,7 +206,7 @@ public abstract class AnnotationConfigUtils {
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, EVENT_LISTENER_PROCESSOR_BEAN_NAME));
 		}
-		//注册事件监听工厂
+		//注册事件监听工厂BeanDifinition
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_FACTORY_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(DefaultEventListenerFactory.class);
 			def.setSource(source);
