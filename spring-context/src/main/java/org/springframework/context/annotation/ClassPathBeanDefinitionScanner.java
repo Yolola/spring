@@ -58,7 +58,8 @@ import java.util.Set;
  */
 
 /**
- * 完成扫描 注册 功能的配置和注册工作  比如初始化一些  （需要扫描或者需要过滤）注解设置到spring环境list中，以备在扫描时使用
+ * 完成扫描 注册 功能的配置和注册工作  比如初始化一些  （需要扫描或者需要过滤）注解
+ * 设置到spring环境list中，以备在扫描时使用
  *
  */
 public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateComponentProvider {

@@ -22,7 +22,7 @@ package org.springframework.beans.factory;
  * that an object depends on its bean name, as this represents a potentially
  * brittle dependence on external configuration, as well as a possibly
  * unnecessary dependence on a Spring API.
- *
+ *想要在bean工厂中知道其bean名称的bean所实现的接口。请注意，通常不建议对象依赖于其bean名称，因为这表示对外部配置的潜在脆弱依赖，以及对Spring API的不必要依赖。
  * <p>For a list of all bean lifecycle methods, see the
  * {@link BeanFactory BeanFactory javadocs}.
  *
