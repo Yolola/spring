@@ -583,10 +583,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		// 留给子类实现扩展  比如加入一些必要的环境变量值
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
+		// 这里会对子类设置的必要环境变量值进行验证如果没有，则报错
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
