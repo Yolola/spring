@@ -60,6 +60,7 @@ public abstract class AbstractBeanDefinitionParser implements BeanDefinitionPars
 	@Override
 	@Nullable
 	public final BeanDefinition parse(Element element, ParserContext parserContext) {
+		//解析 子类扩展方法调用 parseInternal()->doParse()
 		AbstractBeanDefinition definition = parseInternal(element, parserContext);
 		if (definition != null && !parserContext.isNested()) {
 			try {

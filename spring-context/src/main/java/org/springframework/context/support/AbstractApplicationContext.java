@@ -494,7 +494,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			 * 1.设置容器关闭状态为false
 			 * 2.设置容器激活状态为true
 			 * 3.获取系统资源到map中  方便之后调用
-			 * 4.创建早期监听器的 空集合对象
+			 * 4.初始化一些必要环境变量，环境变量验证 ，可以子类设置必须的环境变量，做验证工作
+			 * 5.创建早期监听器的 空集合对象
 			 */
 			prepareRefresh();
 
@@ -583,12 +584,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
-		// 留给子类实现扩展  比如加入一些必要的环境变量值
+		// 留给子类实现扩展  比如加入一些必要的环境变量值  具体看 MyClassPathXmlApplicationContext
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
-		// 这里会对子类设置的必要环境变量值进行验证如果没有，则报错
+		// 这里会对子类设置的必要环境变量值进行验证  强制校验必要环境变量
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...

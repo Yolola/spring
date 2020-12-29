@@ -16,6 +16,8 @@
 
 package org.springframework.core.io;
 
+import org.springframework.lang.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,8 +25,6 @@ import java.net.URI;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-
-import org.springframework.lang.Nullable;
 
 /**
  * Interface for a resource descriptor that abstracts from the actual
@@ -48,6 +48,10 @@ import org.springframework.lang.Nullable;
  * @see ClassPathResource
  * @see ByteArrayResource
  * @see InputStreamResource
+ */
+
+/**
+ * 顾名思义 资源 1.file:xml文件 2.URI 统一资源定位符
  */
 public interface Resource extends InputStreamSource {
 

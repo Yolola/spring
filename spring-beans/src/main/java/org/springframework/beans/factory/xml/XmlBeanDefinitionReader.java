@@ -381,7 +381,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 			throws BeanDefinitionStoreException {
 
 		try {
-			//根据 xlsd 或者 dtd 的xml格式定义 解析成对应的文档对象
+			//根据 xlsd 或者 dtd 的xml格式定义 解析成对应的文档对象 dom4j解析
 			Document doc = doLoadDocument(inputSource, resource);
 			// 注册BeanDifinitions
 			int count = registerBeanDefinitions(doc, resource);
