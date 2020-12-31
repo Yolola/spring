@@ -510,7 +510,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
-				// 允许在上下文子类中对bean工厂进行后处理。
+				/**
+				 * 允许在上下文子类中对bean工厂进行后处理。
+				 * 默认空实现子类可以实现
+				 */
 				postProcessBeanFactory(beanFactory);
 
 				// Invoke factory processors registered as beans in the context.
@@ -645,6 +648,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Configure the bean factory with context callbacks.
 		//添加一个后置管理器 后置管理器实现有很多  这里添加的bpp后置处理器主要功能是 对实现aware 接口及其一些通用的子接口进行回调，
 		// 回调的意义是把spring中的一些内部对象set到我们自己的bean中
+		/**
+		 * TODO 为什么在这里添加BeanPostProcessor
+		 *	容器刷新第六步是一个registerBeanPostProcessors 的方法
+		 */
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		//因为在上一行ApplicationContextAwareProcessor 已经通过回调接口对以下这些内部对象属性赋值到我们的bean中
 		//所以不再需要@Atuwired再次进行依赖注入
@@ -665,6 +672,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
 		// 注册早期的后处理器以将内部bean检测为ApplicationListeners。
+		/**
+		 * TODO 为什么在这里添加BeanPostProcessor
+		 *	容器刷新第六步是一个registerBeanPostProcessors 的方法
+		 */
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found.

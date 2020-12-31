@@ -134,6 +134,9 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 			//定制化BeanFactory
 			customizeBeanFactory(beanFactory);
 			// 初始化documentReader 读取xml文件解析 成bd
+			/**
+			 * 读取bd把实现BeanFactoryPostProcessor 和 BeanPostProcessor接口统一放到
+			 */
 			loadBeanDefinitions(beanFactory);
 			synchronized (this.beanFactoryMonitor) {
 				this.beanFactory = beanFactory;

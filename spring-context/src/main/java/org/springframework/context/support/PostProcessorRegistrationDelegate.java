@@ -42,18 +42,37 @@ final class PostProcessorRegistrationDelegate {
 	}
 
 	//BeanFactoryPostProcessor执行关键代码。
+
+	/**
+	 * 重点：：：：：：：：：：：：：：：：：：：：：：：接口继承关系  BeanDefinitionRegistryPostProcessor继承 BeanFactoryPostProcessor
+	 * @param beanFactory
+	 * @param beanFactoryPostProcessors
+	 */
 	public static void invokeBeanFactoryPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
-		// 实现BeanFactoryPostProcessor接口子类的名字set
+		/**
+		 * 已经执行过的BeanFactoryPostProcessor子类的BeanName的set集合 防止重复执行
+ 		 */
 		Set<String> processedBeans = new HashSet<>();
 		//
 		if (beanFactory instanceof BeanDefinitionRegistry) {
+			/**
+			 * 当前工厂实现了BeanDefinitionRegistry接口 是有BeanDefinition注册功能的
+			 */
 			BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
+			/**
+			 * 存放BeanFactoryPostProcessor
+			 */
 			List<BeanFactoryPostProcessor> regularPostProcessors = new ArrayList<>();
+			/**
+			 * 存放BeanDefinitionRegistryPostProcessor
+			 */
 			List<BeanDefinitionRegistryPostProcessor> registryProcessors = new ArrayList<>();
-
+			/**
+			 * 区别 分开 存放实现的两种接口
+			 */
 			for (BeanFactoryPostProcessor postProcessor : beanFactoryPostProcessors) {
 				if (postProcessor instanceof BeanDefinitionRegistryPostProcessor) {
 					BeanDefinitionRegistryPostProcessor registryProcessor =
@@ -70,13 +89,26 @@ final class PostProcessorRegistrationDelegate {
 			// uninitialized to let the bean factory post-processors apply to them!
 			// Separate between BeanDefinitionRegistryPostProcessors that implement
 			// PriorityOrdered, Ordered, and the rest.
+			/**
+			 * 存放 当前 实现 BeanDefinitionRegistryPostProcessor接口 的对象
+			 */
 			List<BeanDefinitionRegistryPostProcessor> currentRegistryProcessors = new ArrayList<>();
 
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
+			/**
+			 * 在refresh() 第二步种---> loadBeanDefinitions(beanFactory)的时候已经将实现BeanDefinitionRegistryPostProcessor接口的类做了缓存区分
+			 * 并提供方法根据类型可以找到这些 BeanDifiniton 的names 再根据name去创建对象
+			 */
 			String[] postProcessorNames =
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
+				/**
+				 * PriorityOrdered是继承Ordered的接口 先将实现PriorityOrdered的接口拿出来执行
+				 */
 				if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
+					/**
+					 * getBean() 创建实现BeanDefinitionRegistryPostProcessor接口的Bean的	对象 放到currentRegistryProcessors中以便之后执行
+					 */
 					currentRegistryProcessors.add(beanFactory.getBean(ppName, BeanDefinitionRegistryPostProcessor.class));
 					processedBeans.add(ppName);
 				}
@@ -87,8 +119,19 @@ final class PostProcessorRegistrationDelegate {
 			currentRegistryProcessors.clear();
 
 			// Next, invoke the BeanDefinitionRegistryPostProcessors that implement Ordered.
+			/**
+			 * 这里为什么要重新执行？ 参数都一样啊？？TODO WTF???
+			 * 难道是因为以上执行的后置处理器对BeanNames进行了更改，或者说新注册了一些BeanDifinitonRegistryPostProcessor  ？？？  真相只有一个
+			 * 这里只能先解析成BeanDifiniton 新增BeanDifinitonRegistryPostProcessor子类 BeanDifinition 再通过beanfactory对象注册到工厂中，
+			 * 工厂再根据BeanDifiniton进行实例化
+			 */
 			postProcessorNames = beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
+				/**
+				 * PriorityOrdered是继承Ordered的接口 将实现Ordered的接口拿出来执行
+				 *
+				 * 这里可以得出一个结论实现PriorityOrdered的Bean一定在实现 Order的Bean之后执行
+				 */
 				if (!processedBeans.contains(ppName) && beanFactory.isTypeMatch(ppName, Ordered.class)) {
 					currentRegistryProcessors.add(beanFactory.getBean(ppName, BeanDefinitionRegistryPostProcessor.class));
 					processedBeans.add(ppName);
@@ -100,6 +143,13 @@ final class PostProcessorRegistrationDelegate {
 			currentRegistryProcessors.clear();
 
 			// Finally, invoke all other BeanDefinitionRegistryPostProcessors until no further ones appear.
+			/**
+			 * 执行没有实现排序接口的BeanDefinitionRegistryPostProcessor的子类
+			 *
+			 * 这个标识reiterate解决的问题 和 重复获取postProcessorNames 是同一个目的 ：
+			 * 很好理解 - 可以看BeanDefinitionRegistryPostProcessor接口的注释 - 防止执行的Bd注册后置处理器 中新增了  Bd注册后置处理器
+ 			 */
+
 			boolean reiterate = true;
 			while (reiterate) {
 				reiterate = false;
@@ -116,8 +166,13 @@ final class PostProcessorRegistrationDelegate {
 				invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
 				currentRegistryProcessors.clear();
 			}
-
+			/**
+			 * 以上处理完成了BeanDefinitionRegistryPostProcessor的所有实现子类的postProcessBeanDefinitionRegistry()
+			 */
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
+			/**
+			 * 接下来处理 BeanFactoryPostProcessor 的handle方法 callback
+			 */
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);
 		}
@@ -127,6 +182,19 @@ final class PostProcessorRegistrationDelegate {
 			invokeBeanFactoryPostProcessors(beanFactoryPostProcessors, beanFactory);
 		}
 
+
+		/**
+		 * ------------------------重要处理流程--------------------------
+		 * ------------------------重要处理流程--------------------------
+		 * ------------------------重要处理流程--------------------------
+		 * 接下来处理通过 BeanDefinitionRegistryPostProcessor的所有实现子类的postProcessBeanDefinitionRegistry()
+		 * 新增的
+		 * BeanFactoryPostProcessor子类的所有postProcessBeanFactory()方法
+		 *
+		 * 在BeanFactoryPostProcessor子类内注册BeanFactoryPostProcessor子类将不会被执行
+		 *
+		 *
+		 */
 		// Do not initialize FactoryBeans here: We need to leave all regular beans
 		// uninitialized to let the bean factory post-processors apply to them!
 		String[] postProcessorNames =
