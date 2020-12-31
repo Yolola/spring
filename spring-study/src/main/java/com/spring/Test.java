@@ -1,5 +1,6 @@
 package com.spring;
 
+import com.spring.selfEditor.Customer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -13,6 +14,8 @@ public class Test {
 //		applicationContext.refresh();
 //		ServiceTest serviceTest = (ServiceTest) applicationContext.getBean("serviceTest");
 //		serviceTest.sout();
+		Customer customer = applicationContextXml.getBean(Customer.class);
+		System.out.println(customer.toString());
 	}
 }
 

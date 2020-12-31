@@ -16,12 +16,12 @@
 
 package org.springframework.beans.factory.config;
 
-import java.util.Iterator;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.lang.Nullable;
+
+import java.util.Iterator;
 
 /**
  * Configuration interface to be implemented by most listable bean factories.
@@ -77,6 +77,15 @@ public interface ConfigurableListableBeanFactory
 	 * @param autowiredValue the corresponding autowired value. This may also be an
 	 * implementation of the {@link org.springframework.beans.factory.ObjectFactory}
 	 * interface, which allows for lazy resolution of the actual target value.
+	 */
+	/**
+	 * 用相应的自动装配值注册一个特殊的依赖类型。
+	 *  <p>这是为工厂上下文引用设计的，这些引用应该是可自动编写的，
+	 * 但在工厂中未定义为bean：解析为该bean所在的ApplicationContext实例的ApplicationContext类型的依赖关系。
+	 * <p>注意：在普通BeanFactory中，甚至对于BeanFactory接口本身，都没有这样的默认类型注册。
+	 * @paramdependencyType要注册的依赖类型。这通常是一个基本接口，例如BeanFactory，并
+	 * 且只要声明为自动装配依赖项（例如ListableBeanFactory），它的扩展名也可以解析，只要给定值实际实现扩展接口即可。
+	 * @param autowiredValue对应的自动装配值。这也可以是{@link org.springframework.beans.factory.ObjectFactory}接口的实现，接口允许延迟解析实际目标值。
 	 */
 	void registerResolvableDependency(Class<?> dependencyType, @Nullable Object autowiredValue);
 

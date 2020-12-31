@@ -176,6 +176,17 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 						parseDefaultElement(ele, delegate);
 					}
 					else {
+						//自定义的标签解析 入口
+						/**
+						 * 自定义标签解析实现步骤
+						 * 1.在xlsd文件中 自定义命名空间解析规则
+						 * 2.在META-INF下创建 spring.schemas 在里面创建命名空间 key-value映射关系
+						 * 3.在META-INF下创建 spring.handlers 创建处理器key-value
+						 * 4.实现自定义的命名空间解析器 通过extends AbstractSingleBeanDefinitionParser
+						 * 5.实现自定义的handler  通过extends NamespaceHandlerSupport 实现init方法 调用registerBeanDefinitionParser()
+						 * 	 将解析器注册到NamespaceHandlerSupport 中的map中
+						 * 	 接下走当前方法解析调用
+						 */
 						delegate.parseCustomElement(ele);
 					}
 				}

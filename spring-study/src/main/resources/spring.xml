@@ -6,5 +6,29 @@
 
 
 </bean>
+	<bean id="customer" class="com.spring.selfEditor.Customer">
+		<property name="name" value="zhangsan"></property>
+		<property name="address" value="山西省_长治市_襄垣县"></property>
+	</bean>
 
+<!--自定义属性编辑器第一种方法  自定义registrar依赖CustomEditorConfigurer执行，因为他实现BFPP接口，执行在Bean创建之前，把自定义属性编辑器注册到cutomors map中    -->
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="propertyEditorRegistrars">
+			<list>
+				<bean  class="com.spring.selfEditor.AddressEditorRegistrar">
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!--第二种方法  直接将 自定义属性编辑器注册到cutomors map中-->
+<!--	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">-->
+<!--		<property name="customEditors">-->
+<!--			<map>-->
+<!--				<entry  key="com.spring.selfEditor.Address">-->
+<!--					<value type="com.spring.selfEditor.AddressEditor"></value>-->
+<!--				</entry>-->
+<!--			</map>-->
+<!--		</property>-->
+<!--	</bean>-->
 </beans>

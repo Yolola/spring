@@ -505,6 +505,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 			// Prepare the bean factory for use in this context.
 			// 准备在这种情况下使用的bean工厂。
+			// 对bean工厂中的属性或者说是在创建对象过程中依赖的一些处理器对象进行创建赋值，以便使用
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -636,12 +637,17 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Tell the internal bean factory to use the context's class loader  .
 		// 告诉内部bean工厂使用上下文的类加载器等。
 		beanFactory.setBeanClassLoader(getClassLoader());
+		//spring el表达式 处理器
 		beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
+		//属性编辑注册器 TODO 扩展点
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
 		// Configure the bean factory with context callbacks.
-		//添加一个后置管理器到context 后置管理器实现有很多
+		//添加一个后置管理器 后置管理器实现有很多  这里添加的bpp后置处理器主要功能是 对实现aware 接口及其一些通用的子接口进行回调，
+		// 回调的意义是把spring中的一些内部对象set到我们自己的bean中
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+		//因为在上一行ApplicationContextAwareProcessor 已经通过回调接口对以下这些内部对象属性赋值到我们的bean中
+		//所以不再需要@Atuwired再次进行依赖注入
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);
 		beanFactory.ignoreDependencyInterface(ResourceLoaderAware.class);
@@ -651,15 +657,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// BeanFactory interface not registered as resolvable type in a plain factory.
 		// MessageSource registered (and found for autowiring) as a bean.
+		//注册依赖处理器?
 		beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);
 		beanFactory.registerResolvableDependency(ResourceLoader.class, this);
 		beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);
 		beanFactory.registerResolvableDependency(ApplicationContext.class, this);
 
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
+		// 注册早期的后处理器以将内部bean检测为ApplicationListeners。
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
 		// Detect a LoadTimeWeaver and prepare for weaving, if found.
+		// aspectj支持，java织入三种 方式，编译器织入，类加载器织入，运行时期织入。
+		/**
+		 * 1.编译器 指使用特殊的java编译器，将织面织入到java类中
+		 * 2.类加载器织入 通过特殊的类加载器，在类字节码加载到jvm时，织入切面
+		 * 3.运行时期织入则是 利用java jdk 或者cglib 技术 实现的运行时期织入
+		 */
+
 		if (beanFactory.containsBean(LOAD_TIME_WEAVER_BEAN_NAME)) {
 			beanFactory.addBeanPostProcessor(new LoadTimeWeaverAwareProcessor(beanFactory));
 			// Set a temporary ClassLoader for type matching.
@@ -667,6 +682,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Register default environment beans.
+		// 把环境对象放到bean工厂中
 		if (!beanFactory.containsLocalBean(ENVIRONMENT_BEAN_NAME)) {
 			beanFactory.registerSingleton(ENVIRONMENT_BEAN_NAME, getEnvironment());
 		}

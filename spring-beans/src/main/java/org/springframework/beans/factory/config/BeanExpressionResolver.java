@@ -31,6 +31,10 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 3.0
  */
+
+/**
+ * 如何定义自己的表达式是否可以通过实现此接口
+ */
 public interface BeanExpressionResolver {
 
 	/**
