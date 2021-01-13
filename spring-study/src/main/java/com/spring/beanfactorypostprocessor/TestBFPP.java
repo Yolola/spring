@@ -11,6 +11,7 @@ public class TestBFPP implements BeanFactoryPostProcessor {
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		DefaultListableBeanFactory beanFactory1=(DefaultListableBeanFactory)beanFactory;
+
 //		beanFactory1.setAllowBeanDefinitionOverriding();
 	}
 }

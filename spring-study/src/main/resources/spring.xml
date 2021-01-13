@@ -2,24 +2,24 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/context"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-<bean id="testDao" class="com.spring.dao.TestDao">
+<bean id="testDao" class="com.spring.dao.TestDao"></bean>
 
+	<bean class="com.spring.beanfactorypostprocessor.TestBFPP"></bean>
 
-</bean>
-	<bean id="customer" class="com.spring.selfEditor.Customer">
-		<property name="name" value="zhangsan"></property>
-		<property name="address" value="山西省_长治市_襄垣县"></property>
-	</bean>
+<!--	<bean id="customer" class="com.spring.selfEditor.Customer">-->
+<!--		<property name="name" value="zhangsan"></property>-->
+<!--		<property name="address" value="山西省_长治市_襄垣县"></property>-->
+<!--	</bean>-->
 
-<!--自定义属性编辑器第一种方法  自定义registrar依赖CustomEditorConfigurer执行，因为他实现BFPP接口，执行在Bean创建之前，把自定义属性编辑器注册到cutomors map中    -->
-	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
-		<property name="propertyEditorRegistrars">
-			<list>
-				<bean  class="com.spring.selfEditor.AddressEditorRegistrar">
-				</bean>
-			</list>
-		</property>
-	</bean>
+<!--&lt;!&ndash;自定义属性编辑器第一种方法  自定义registrar依赖CustomEditorConfigurer执行，因为他实现BFPP接口，执行在Bean创建之前，把自定义属性编辑器注册到cutomors map中    &ndash;&gt;-->
+<!--	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">-->
+<!--		<property name="propertyEditorRegistrars">-->
+<!--			<list>-->
+<!--				<bean  class="com.spring.selfEditor.AddressEditorRegistrar">-->
+<!--				</bean>-->
+<!--			</list>-->
+<!--		</property>-->
+<!--	</bean>-->
 
 	<!--第二种方法  直接将 自定义属性编辑器注册到cutomors map中-->
 <!--	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">-->
@@ -31,4 +31,6 @@
 <!--			</map>-->
 <!--		</property>-->
 <!--	</bean>-->
+
+
 </beans>
