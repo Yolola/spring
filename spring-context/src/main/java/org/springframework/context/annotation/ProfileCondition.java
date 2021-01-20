@@ -29,6 +29,10 @@ import org.springframework.util.MultiValueMap;
  * @author Juergen Hoeller
  * @since 4.0
  */
+
+/**
+ * condition的应用 主要作用于 配置类 对应不同的开发环境 可以启用不同的配置
+ */
 class ProfileCondition implements Condition {
 
 	@Override

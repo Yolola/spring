@@ -284,6 +284,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
+		// TODO 处理 @Import annotations
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
 		// Process any @ImportResource annotations
@@ -299,12 +300,13 @@ class ConfigurationClassParser {
 		}
 
 		// Process individual @Bean methods
-		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
+ 		Set<MethodMetadata> beanMethods = retrieveBeanMethodMetadata(sourceClass);
 		for (MethodMetadata methodMetadata : beanMethods) {
 			configClass.addBeanMethod(new BeanMethod(methodMetadata, configClass));
 		}
 
 		// Process default methods on interfaces
+		// 处理接口上的默认方法 jdk8接口可以有默认方法的实现
 		processInterfaces(configClass, sourceClass);
 
 		// Process superclass, if any
@@ -371,6 +373,7 @@ class ConfigurationClassParser {
 
 	/**
 	 * Retrieve the metadata for all <code>@Bean</code> methods.
+	 * 检索所有<code> @Bean <code>方法的元数据。
 	 */
 	private Set<MethodMetadata> retrieveBeanMethodMetadata(SourceClass sourceClass) {
 		AnnotationMetadata original = sourceClass.getMetadata();

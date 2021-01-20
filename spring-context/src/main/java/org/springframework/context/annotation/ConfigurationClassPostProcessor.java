@@ -216,6 +216,11 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 	/**
 	 * Derive further bean definitions from the configuration classes in the registry.
+	 *
+	 * TODO 注释这句话表达的超级棒 从注册表中的配置类派生更多的beandefinition。
+	 *
+	 * 我们配置了包扫描之后会将本类注册BeanDifition 在invokeBeanFactoryPostProcessor中执行本方法，配置的扫描路径下，可能会有
+	 * 其他的一些 通过java配置的类(@Configuration)，如果是注解配置类，这里来处理这些注解配置类
 	 */
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) {
@@ -261,15 +266,17 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 */
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
+		// 拿到xml配置的包扫描路径下的BD以及开启注解扫描（Component-Scan）必要内部的BD names
 		String[] candidateNames = registry.getBeanDefinitionNames();
-		//拿出通过扫描 解析注解 生成的BeanDifitioin
 		for (String beanName : candidateNames) {
 			BeanDefinition beanDef = registry.getBeanDefinition(beanName);
+			// 如果是配置类，被处理过则会给一个attribut 防止重复处理
 			if (beanDef.getAttribute(ConfigurationClassUtils.CONFIGURATION_CLASS_ATTRIBUTE) != null) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Bean definition has already been processed as a configuration class: " + beanDef);
 				}
 			}
+			//
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
@@ -313,6 +320,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		Set<BeanDefinitionHolder> candidates = new LinkedHashSet<>(configCandidates);
 		Set<ConfigurationClass> alreadyParsed = new HashSet<>(configCandidates.size());
 		do {
+			//TODO  重点解析工作
 			parser.parse(candidates);
 			parser.validate();
 

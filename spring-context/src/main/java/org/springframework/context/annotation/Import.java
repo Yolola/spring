@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 /**
  * Indicates one or more <em>component classes</em> to import &mdash; typically
  * {@link Configuration @Configuration} classes.
- *
+ * 用于导入配置类
  * <p>Provides functionality equivalent to the {@code <import/>} element in Spring XML.
  * Allows for importing {@code @Configuration} classes, {@link ImportSelector} and
  * {@link ImportBeanDefinitionRegistrar} implementations, as well as regular component

@@ -16,18 +16,14 @@
 
 package org.springframework.context.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.core.annotation.AliasFor;
 
+import java.lang.annotation.*;
+
 /**
  * Indicates one or more resources containing bean definitions to import.
- *
+ * 指示一个或多个包含要导入的bean定义的资源
  * <p>Like {@link Import @Import}, this annotation provides functionality similar to
  * the {@code <import/>} element in Spring XML. It is typically used when designing
  * {@link Configuration @Configuration} classes to be bootstrapped by an
