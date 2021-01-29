@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/context"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
-	<beans:component-scan base-package="com.spring"></beans:component-scan>
+	<beans:component-scan base-package="com.spring.config"></beans:component-scan>
 <bean id="testDao" class="com.spring.dao.TestDao"></bean>
 
 	<bean class="com.spring.beanfactorypostprocessor.TestBFPP"></bean>

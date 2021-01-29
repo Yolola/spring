@@ -86,6 +86,10 @@ import java.util.*;
  */
 /**
  * 配置类解析器
+ * 解析{@link Configuration}类定义，填充{@link ConfigurationClass}对象的集合（解析单个Configuration类可能会产生任意数量的ConfigurationClass对象，
+ * 因为一个配置类可以使用{@link Import}注释导入另一个） 。
+ * <p>此类有助于将解析Configuration类的结构与基于该模型的内容注册BeanDefinition对象的关注区分开来（{@code @ComponentScan}批注除外，该批注需要立即注册） 。 <p>
+ *     此基于ASM的实现避免了反射和渴望的类加载，以便与Spring ApplicationContext中的惰性类加载有效地互操作。
  */
 
 class ConfigurationClassParser {
@@ -217,13 +221,14 @@ class ConfigurationClassParser {
 			else {
 				// Explicit bean definition found, probably replacing an import.
 				// Let's remove the old one and go with the new one.
+				// 找到明确的bean定义，可能替换了导入。让我们删除旧的，然后使用新的。
 				this.configurationClasses.remove(configClass);
 				this.knownSuperclasses.values().removeIf(configClass::equals);
 			}
 		}
 
 		// Recursively process the configuration class and its superclass hierarchy.
-		//递归处理配置类及其超类层次结构。把当前类作为sourceclass
+		//递归处理配置类及其超类层次结构。把当前类作为sourceclass,主要处理配置类的注解
 		SourceClass sourceClass = asSourceClass(configClass);
 		do {
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass);
@@ -247,6 +252,7 @@ class ConfigurationClassParser {
 		// 判断是否被@Component标记
 		if (configClass.getMetadata().isAnnotated(Component.class.getName())) {
 			// Recursively process any member (nested) classes first
+			// 首先递归处理任何成员（嵌套）类
 			processMemberClasses(configClass, sourceClass);
 		}
 
@@ -276,12 +282,14 @@ class ConfigurationClassParser {
  				Set<BeanDefinitionHolder> scannedBeanDefinitions =
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
 				// Check the set of scanned definitions for any further config classes and parse recursively if needed
+				//检查扫描的定义集是否有其他配置类，并在需要时递归解析
 				for (BeanDefinitionHolder holder : scannedBeanDefinitions) {
 					BeanDefinition bdCand = holder.getBeanDefinition().getOriginatingBeanDefinition();
 					if (bdCand == null) {
 						bdCand = holder.getBeanDefinition();
 					}
 					if (ConfigurationClassUtils.checkConfigurationClassCandidate(bdCand, this.metadataReaderFactory)) {
+						// 如果扫描出派生的配置类这里进行递归解析 处理
 						parse(bdCand.getBeanClassName(), holder.getBeanName());
 					}
 				}
@@ -289,7 +297,7 @@ class ConfigurationClassParser {
 		}
 
 		// Process any @Import annotations
-		// TODO 处理 @Import annotations
+		// TODO 处理 @Import annotations  springboot自动装配
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 
 		// Process any @ImportResource annotations
@@ -548,13 +556,15 @@ class ConfigurationClassParser {
 		}
 		else {
 			this.importStack.push(configClass);
-			try {
+			try {//处理Import导入的类
 				for (SourceClass candidate : importCandidates) {
 					if (candidate.isAssignable(ImportSelector.class)) {
 						// Candidate class is an ImportSelector -> delegate to it to determine imports
 						Class<?> candidateClass = candidate.loadClass();
+						// 实例化该类型	ImportSelector
 						ImportSelector selector = ParserStrategyUtils.instantiateClass(candidateClass, ImportSelector.class,
 								this.environment, this.resourceLoader, this.registry);
+						// 是否是延迟处理
 						if (selector instanceof DeferredImportSelector) {
 							this.deferredImportSelectorHandler.handle(configClass, (DeferredImportSelector) selector);
 						}
@@ -575,6 +585,7 @@ class ConfigurationClassParser {
 					}
 					else {
 						// Candidate class not an ImportSelector or ImportBeanDefinitionRegistrar ->
+						// 派生类不是这俩中类型就把他当作一个配置类来处理
 						// process it as an @Configuration class
 						this.importStack.registerImport(
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());

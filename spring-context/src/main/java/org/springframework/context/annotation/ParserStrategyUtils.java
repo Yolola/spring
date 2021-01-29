@@ -16,8 +16,6 @@
 
 package org.springframework.context.annotation;
 
-import java.lang.reflect.Constructor;
-
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.Aware;
@@ -32,6 +30,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+
+import java.lang.reflect.Constructor;
 
 /**
  * Common delegate code for the handling of parser strategies, e.g.
@@ -63,6 +63,7 @@ abstract class ParserStrategyUtils {
 		ClassLoader classLoader = (registry instanceof ConfigurableBeanFactory ?
 				((ConfigurableBeanFactory) registry).getBeanClassLoader() : resourceLoader.getClassLoader());
 		T instance = (T) createInstance(clazz, environment, resourceLoader, registry, classLoader);
+		// 实例化之后会执行对应实现的aware接口 回调赋值
 		ParserStrategyUtils.invokeAwareMethods(instance, environment, resourceLoader, registry, classLoader);
 		return instance;
 	}
