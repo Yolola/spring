@@ -73,7 +73,7 @@ public interface ApplicationEventMulticaster {
 	 * if possible as it provides better support for generics-based events.
 	 * @param event the event to multicast
 	 */
-	void multicastEvent(ApplicationEvent event);
+	void  multicastEvent(ApplicationEvent event);
 
 	/**
 	 * Multicast the given application event to appropriate listeners.

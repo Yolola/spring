@@ -40,7 +40,7 @@ import java.util.EventListener;
 public interface ApplicationListener<E extends ApplicationEvent> extends EventListener {
 
 	/**
-	 * Handle an application event.
+	 * Handle an application event. 处理应用事件
 	 * @param event the event to respond to
 	 */
 	void onApplicationEvent(E event);
