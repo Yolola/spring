@@ -6,8 +6,10 @@
 <bean id="testDao" class="com.spring.dao.TestDao"></bean>
 
 	<bean class="com.spring.beanfactorypostprocessor.TestBFPP"></bean>
-<!--		<bean id="parent" class="com.spring.bdmerge.Parent" ></bean>-->
+	<!--TODO 测试 praent属性-->
+	<!--<bean id="parent" class="com.spring.bdmerge.Parent" ></bean>-->
 <!--	<bean id="son" class="com.spring.bdmerge.Son" parent="parent"></bean>-->
+	<!--TODO 测试 自定义编辑器-->
 <!--	<bean id="customer" class="com.spring.selfEditor.Customer">-->
 <!--		<property name="name" value="zhangsan"></property>-->
 <!--		<property name="address" value="山西省_长治市_襄垣县"></property>-->

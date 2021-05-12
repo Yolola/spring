@@ -992,6 +992,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Return whether this bean definition is 'synthetic', that is,
 	 * not defined by the application itself.
+	 * 返回此bean定义是否是“合成的”，即不是由spring本身定义的。 可能这里涉及aop
 	 */
 	public boolean isSynthetic() {
 		return this.synthetic;

@@ -37,4 +37,5 @@ rootProject.children.each {project ->
 }
 include 'spring-study'
 include 'spring-study'
+include 'test'
 

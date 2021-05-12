@@ -839,7 +839,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 						}
 					}
 				}
-				else {
+				else {//开始获取bean
 					getBean(beanName);
 				}
 			}
